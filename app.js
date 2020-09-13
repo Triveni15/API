@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
+const axios = require('axios');
 
 const app = express();
 
@@ -11,7 +12,23 @@ app.use(express.static('public'));
 
 app.get("/", (req,res) => {
 
-	res.send('Hello World!');
+	axios.get('https://api.github.com/users', {headers: {'Accept': 'application/vnd.github.v3+json'}}).then((response) => {
+		res.send(response.data);
+	})
+	.catch((error) => {
+		console.log(error);
+	});
+	
+});
+
+app.get("/:username", (req,res) => {
+
+	axios.get('https://api.github.com/users/' + req.params.username, {headers: {'Accept': 'application/vnd.github.v3+json'}}).then((response) => {
+		res.send(response.data);
+	})
+	.catch((error) => {
+		console.log(error);
+	});
 	
 });
 
